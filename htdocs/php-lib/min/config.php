@@ -154,3 +154,19 @@ $min_libPath = dirname(__FILE__) . '/lib';
 
 // try to disable output_compression (may not have an effect)
 ini_set('zlib.output_compression', '0');
+
+
+/**
+ * To place "min" in a subdirectory.
+ * @link http://code.google.com/p/minify/wiki/AlternateFileLayouts
+ */
+define('PATH_MIN_SUBDIRECTORY', '/php-lib/min/');
+
+// Set the document root to be the path of the "site root"
+$min_documentRoot = substr(__FILE__, 0, -1*(strlen(PATH_MIN_SUBDIRECTORY . 'config.php')));
+
+// Set $sitePrefix to the path of the site from the webserver's real docroot
+list($sitePrefix) = explode(PATH_MIN_SUBDIRECTORY, $_SERVER['SCRIPT_NAME'], 2);
+
+// Prepend $sitePrefix to the rewritten URIs in CSS files
+$min_symlinks['//' . ltrim($sitePrefix, '/')] = $min_documentRoot;
