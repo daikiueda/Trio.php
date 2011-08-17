@@ -266,7 +266,7 @@ class Minify {
             // the goal is to use only the cache methods to sniff the length and 
             // output the content, as they do not require ever loading the file into
             // memory.
-            $cacheId = 'minify_' . self::_getCacheId();
+            $cacheId = /*'minify_' .*/ self::_getCacheId();
             $fullCacheId = (self::$_options['encodeMethod'])
                 ? $cacheId . '.gz'
                 : $cacheId;
@@ -495,7 +495,12 @@ class Minify {
      */
     protected static function _getCacheId()
     {
-        return md5(serialize(array(
+        if( $_SERVER["REDIRECT_URL"] ){
+          preg_match( "/([^\/]+)$/", $_SERVER["REDIRECT_URL"], $filename );
+          return $filename[1];
+        }
+
+        return 'minify_' . md5(serialize(array(
             Minify_Source::getDigest(self::$_controller->sources)
             ,self::$_options['minifiers'] 
             ,self::$_options['minifierOptions']
