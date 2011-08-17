@@ -1,6 +1,6 @@
 var MUB = {
     _uid : 0
-    ,_minRoot : '/min/?'
+    ,_minRoot : '/php-lib/min/?'
     ,checkRewrite : function () {
         var testUri = location.pathname.replace(/\/[^\/]*$/, '/rewriteTest.js').substr(1);
         function fail() {
@@ -10,8 +10,8 @@ var MUB = {
             url : '../f=' + testUri + '&' + (new Date()).getTime()
             ,success : function (data) {
                 if (data === '1') {
-                    MUB._minRoot = '/min/';
-                    $('span.minRoot').html('/min/');
+                    MUB._minRoot = '/php-lib/min/';
+                    $('span.minRoot').html('/php-lib/min/');
                 } else
                     fail();                
             }
