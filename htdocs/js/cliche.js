@@ -1,9 +1,13 @@
 /**
+ * cliche.js
  *
+ * @author Daiki UEDA
+ * @version 0.0.1
  */
 (function(){
 	var THIS_FILE_CONTEXT = "js/cliche.js";
 
+	/* Do not change the variable name */
 	var required = [
 		"source/rollover.js",
 		"source/foundation.js"

@@ -60,7 +60,7 @@ class JSMinProxy {
 	private function getSourceFilePathes(){
 		$loader_source_code = file_get_contents( $this->loaderSourceDir . $this->loaderSourceFilename );
 
-		preg_match( "/required[ ]?=[ ]?\[([^\]]*)\]/s", $loader_source_code, $matches );
+		preg_match( "/var required[ ]?=[ ]?\[([^\]]*)\]/s", $loader_source_code, $matches );
 		preg_match_all( "/['\"](.+.js)['\"]/", $matches[1], $file_pathes );
 
 		return array_map( array( $this, 'adjustSourceFilePath' ), $file_pathes[1] );
