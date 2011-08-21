@@ -1,16 +1,17 @@
 /**
- * cliche.js
+ * sample.js
  *
  * @author Daiki UEDA
  * @version 0.0.1
  */
 (function(){
-	var THIS_FILE_CONTEXT = "js/cliche.js";
+	var THIS_FILE_CONTEXT = "js/sample.js";
 
 	/* Do not change the variable name */
 	var required = [
-		"source/rollover.js",
-		"source/foundation.js"
+		"source/sample_1.js",
+		"source/sample_2.js",
+		"source/sample_3.js"
 	];
 
 	(function(){
