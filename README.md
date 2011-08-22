@@ -1,4 +1,4 @@
-# cliche.js
+# Trio.php
 
-## Webコンテンツで常用される機能を提供するJavaScriptライブラリ
+## Combine, Compress and Cache JavaScript files.
 
