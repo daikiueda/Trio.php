@@ -1,5 +1,0 @@
-<Files ~ "\.js$">
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule (.*\.js?) /php-lib/minify-proxy/minify-js.php
-</Files>
