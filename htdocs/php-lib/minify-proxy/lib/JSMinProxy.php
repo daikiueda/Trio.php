@@ -11,7 +11,7 @@
  * 結合・圧縮したファイルをキャッシュすることができます。
  *
  * @author Daiki UEDA
- * @version 1.0
+ * @version 1.0.1
  */
 class JSMinProxy {
 
@@ -23,6 +23,20 @@ class JSMinProxy {
 	public static function minify( $code_str ){
 		require_once 'JSMin/JSMin.php';
 		return JSMin::minify( $code_str );
+	}
+
+	/**
+	 * 結合対象のソースファイルが見つからない場合に
+	 * 代替のコードを埋め込む
+	 * @param string $filepath 存在しないJSファイルのパス
+	 * @return string 代替コード
+	 */
+	public static function onFileNotFound( $filepath ){
+		return '' .
+			'(function(){' .
+			'	var message = "\'' . $filepath . '\' is not found.";' .
+			'	!!window.console ? console.warn(message): alert(message);' .
+			'})();';
 	}
 
 	/** ローダーJSが設置されたディレクトリのパス */
@@ -87,7 +101,10 @@ class JSMinProxy {
 		}
 
 		for( $i = 0, $fileCount = count( $source_filepathes ); $i < $fileCount; $i++ ){
-			if( $cash_filetime < filemtime( $source_filepathes[$i] ) ){
+			if(
+				file_exists( $source_filepathes[$i] ) &&
+				$cash_filetime < filemtime( $source_filepathes[$i] )
+			){
 				return false;
 			}
 		}
@@ -119,7 +136,13 @@ class JSMinProxy {
 
 		$code_str = '';
 		for( $i = 0, $fileCount = count( $target_files ); $i < $fileCount; $i++ ){
-			$code_str .= file_get_contents( $target_files[$i] );
+			if( file_exists( $target_files[$i] ) ){
+				$code_str .= file_get_contents( $target_files[$i] );
+			}
+			else {
+				$short_filepath = substr( $target_files[$i], strlen( $this->loaderSourceDir ) );
+				$code_str .= JSMinProxy::onFileNotFound( $short_filepath );
+			}
 		}
 
 		$code_str = JSMinProxy::minify( $code_str );
