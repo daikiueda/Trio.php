@@ -7,7 +7,7 @@
  * 必要なJSファイルを抽出し、結合・圧縮をほどこし、1つのファイルとして出力します。
  * コードの圧縮処理は、JSMinライブラリを使用しています。
  *
- * setCashDirメソッドでキャッシュファイルの格納ディレクトリを設定すれば、
+ * setCacheDirメソッドでキャッシュファイルの格納ディレクトリを設定すれば、
  * 結合・圧縮したファイルをキャッシュすることができます。
  *
  * @author Daiki UEDA
@@ -46,7 +46,7 @@ class JSMinProxy {
 	private $loaderSourceFilename;
 
 	/** キャッシュファイルを格納するディレクトリのパス */
-	private $cashDir;
+	private $cacheDir;
 
 	/**
 	 * コンストラクタ
@@ -84,26 +84,26 @@ class JSMinProxy {
 	 * キャッシュファイルが有効であるかテストする
 	 * キャッシュファイルが存在し、かつ、ソースとなるJSファイルより新しい場合は、
 	 * そのキャッシュファイルを有効なものと判断する
-	 * @param string $cash_filepath キャッシュファイルのファイルパス
+	 * @param string $cache_filepath キャッシュファイルのファイルパス
 	 * @param array $source_filepathes ソースとなるJSファイルのファイルパスの配列
 	 * @return boolean キャッシュが有効な場合はtrue、そうでない場合はfalse
 	 */
-	private function isCashValid( $cash_filepath, $source_filepathes ){
+	private function isCacheValid( $cache_filepath, $source_filepathes ){
 
-		if( !file_exists( $cash_filepath = $this->cashDir . $this->loaderSourceFilename ) ){
+		if( !file_exists( $cache_filepath = $this->cacheDir . $this->loaderSourceFilename ) ){
 			return false;
 		}
 
-		$cash_filetime = filemtime( $cash_filepath );
+		$cache_filetime = filemtime( $cache_filepath );
 
-		if( $cash_filetime < filemtime( $this->loaderSourceDir . $this->loaderSourceFilename ) ){
+		if( $cache_filetime < filemtime( $this->loaderSourceDir . $this->loaderSourceFilename ) ){
 			return false;
 		}
 
 		for( $i = 0, $fileCount = count( $source_filepathes ); $i < $fileCount; $i++ ){
 			if(
 				file_exists( $source_filepathes[$i] ) &&
-				$cash_filetime < filemtime( $source_filepathes[$i] )
+				$cache_filetime < filemtime( $source_filepathes[$i] )
 			){
 				return false;
 			}
@@ -116,8 +116,8 @@ class JSMinProxy {
 	 * キャッシュファイルを格納するディレクトリを設定する
 	 * @param type $dirname キャッシュファイルを格納するディレクトリのパス
 	 */
-	public function setCashDir( $dirname ){
-		$this->cashDir = rtrim( $dirname, '/' ) . '/';
+	public function setCacheDir( $dirname ){
+		$this->cacheDir = rtrim( $dirname, '/' ) . '/';
 	}
 
 	/**
@@ -127,10 +127,10 @@ class JSMinProxy {
 		$target_files = $this->getSourceFilePathes();
 
 		if(
-			isset( $this->cashDir ) &&
-			$this->isCashValid( $cash_filepath = $this->cashDir . $this->loaderSourceFilename, $target_files )
+			isset( $this->cacheDir ) &&
+			$this->isCacheValid( $cache_filepath = $this->cacheDir . $this->loaderSourceFilename, $target_files )
 		){
-			readfile( $cash_filepath );
+			readfile( $cache_filepath );
 			exit;
 		}
 
@@ -147,10 +147,10 @@ class JSMinProxy {
 
 		$code_str = JSMinProxy::minify( $code_str );
 
-		if( file_exists( $this->cashDir ) ){
-			$cash_file_handle = fopen( $cash_filepath, "w+" );
-			fwrite( $cash_file_handle, $code_str );
-			fclose( $cash_file_handle );
+		if( file_exists( $this->cacheDir ) ){
+			$cache_file_handle = fopen( $cache_filepath, "w+" );
+			fwrite( $cache_file_handle, $code_str );
+			fclose( $cache_file_handle );
 		}
 
 		echo $code_str;
