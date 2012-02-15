@@ -11,7 +11,7 @@
  * 結合・圧縮したファイルをキャッシュすることができます。
  *
  * @author Daiki UEDA
- * @version 1.0.2
+ * @version 1.0.3
  */
 class JSMinProxy {
 
@@ -74,12 +74,20 @@ class JSMinProxy {
 	private function getSourceFilePathes(){
 		$loader_source_code = file_get_contents( $this->loaderSourceDir . $this->loaderSourceFilename );
 		
-		// ローダーJSの内容から、読込ファイルのパス指定記述を抽出して、配列に格納
+		// ローダーJSの内容から、読込ファイルのパス指定記述を抽出する
 		preg_match( "/var required[ ]?=[ ]?\[([^\]]*)\]/s", $loader_source_code, $matches );
-		preg_match_all( "/['\"](.+.js)['\"]/", $matches[1], $file_pathes );
 		
-		// 読込ファイルの配列について、パス指定を調整。調整後の配列を返す
-		return array_map( array( $this, 'adjustSourceFilePath' ), $file_pathes[1] );
+		// パス指定記述が抽出された場合は、パス指定の配列を返す
+		if( count( $matches ) > 0 ){
+			preg_match_all( "/['\"](.+.js)['\"]/", $matches[1], $file_pathes );
+			
+			// パス指定を調整。調整後の配列を返す
+			return array_map( array( $this, 'adjustSourceFilePath' ), $file_pathes[1] );
+		}
+		// パス指定記述が抽出されない場合は、空の配列を返す
+		else {
+			return array();
+		}
 	}
 
 	/**
