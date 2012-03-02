@@ -1,0 +1,6 @@
+<Files ~ "\.css$">
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule .*\.css$ /ueda/php-lib/minify-proxy/minify-less.php
+</Files>
