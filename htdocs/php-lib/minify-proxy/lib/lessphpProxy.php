@@ -147,7 +147,7 @@ class lessphpProxy {
 		// キャッシュが有効な場合は、キャッシュファイルの内容を出力して処理を終える
 		if(
 			isset( $this->cacheDir ) &&
-			$this->testCacheValidity( $cache_filepath, $target_files )
+			$this->testCacheValidity( $target_files )
 		){
 			readfile( $cache_filepath );
 			exit;
