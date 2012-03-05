@@ -5,13 +5,13 @@
  *
  * ローダー用のJavaScriptファイル（以下、ローダーJS）のコードを解析して
  * 必要なJSファイルを抽出し、結合・圧縮をほどこし、1つのファイルとして出力します。
- * コードの圧縮処理は、JSMinライブラリを使用しています。
+ * コードの圧縮処理には、JSMinライブラリを使用します。
  *
- * setCacheDirメソッドでキャッシュファイルの格納ディレクトリを設定すれば、
- * 結合・圧縮したファイルをキャッシュすることができます。
+ * setCacheDirメソッドによるキャッシュファイルの格納ディレクトリの設定がある場合、
+ * 結合・圧縮したファイルをキャッシュします。
  *
  * @author Daiki UEDA
- * @version 1.0.3
+ * @version 1.0.4
  */
 class JSMinProxy {
 
@@ -94,11 +94,10 @@ class JSMinProxy {
 	 * キャッシュファイルが有効であるかテストする
 	 * キャッシュファイルが存在し、かつ、ソースとなるJSファイルより新しい場合は、
 	 * そのキャッシュファイルを有効なものと判断する
-	 * @param string $cache_filepath キャッシュファイルのファイルパス
 	 * @param array $source_filepathes ソースとなるJSファイルのファイルパスの配列
 	 * @return boolean キャッシュが有効な場合はtrue、そうでない場合はfalse
 	 */
-	private function testCacheValidity( $cache_filepath, $source_filepathes ){
+	private function testCacheValidity( $source_filepathes ){
 		
 		// キャッシュファイルのパスを取得
 		$cache_filepath = $this->cacheDir . $this->loaderSourceFilename;
