@@ -17,9 +17,11 @@ if( $_SERVER["SCRIPT_NAME"] === $_SERVER["REQUEST_URI"] ){
 
 require_once 'lib/JSMinProxy.php';
 
-preg_match( "/^(.+\/)([^\/]+)$/", $_SERVER["REQUEST_URI"], $matches );
+$req_uri = preg_replace( "/\?.*$/", "", $_SERVER["REQUEST_URI"] );
+
+preg_match( "/^(.+\/)([^\/]+)$/", $req_uri, $matches );
 $sub_directory = preg_replace( "/^\/js\//", "", $matches[1] );
 
-$js_min_proxy = new JSMinProxy( $_SERVER["DOCUMENT_ROOT"] . $_SERVER["REQUEST_URI"] );
+$js_min_proxy = new JSMinProxy( $_SERVER["DOCUMENT_ROOT"] . $req_uri );
 $js_min_proxy->setCacheDir( $_SERVER["DOCUMENT_ROOT"] . '/js/build/' . $sub_directory );
 $js_min_proxy->serve();

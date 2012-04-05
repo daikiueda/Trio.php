@@ -17,10 +17,12 @@ if( $_SERVER["SCRIPT_NAME"] === $_SERVER["REQUEST_URI"] ){
 
 require_once 'lib/lessphpProxy.php';
 
-preg_match( "/^(.+\/)([^\/]+)$/", $_SERVER["REQUEST_URI"], $matches );
+$req_uri = preg_replace( "/\?.*$/", "", $_SERVER["REQUEST_URI"] );
+
+preg_match( "/^(.+\/)([^\/]+)$/", $req_uri, $matches );
 $sub_directory = preg_replace( "/^\/common\/css\//", "", $matches[1] );
 
-$path_source_less = preg_replace( '/\.css$/', '.less', $_SERVER["REQUEST_URI"] );
+$path_source_less = preg_replace( '/\.css$/', '.less', $req_uri );
 
 $lessphp_proxy = new lessphpProxy( $_SERVER["DOCUMENT_ROOT"] . $path_source_less );
 $lessphp_proxy->setCacheDir( $_SERVER["DOCUMENT_ROOT"] . '/common/css/build/' . $sub_directory );
