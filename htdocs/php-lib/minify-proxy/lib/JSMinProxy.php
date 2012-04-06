@@ -181,12 +181,12 @@ class JSMinProxy {
 		// 結合・圧縮した内容をファイルに保存する
 		if( isset( $this->cacheDir ) ){
 			if( !file_exists( $this->cacheDir ) ){
-				if( mkdir( $this->cacheDir, 0777, true ) ){
-					$cache_file_handle = fopen( $cache_filepath, "w+" );
-					fwrite( $cache_file_handle, $code_str );
-					fclose( $cache_file_handle );
-				}
+				mkdir( $this->cacheDir, 0777, true );
 			}
+			
+			$cache_file_handle = fopen( $cache_filepath, "w+" );
+			fwrite( $cache_file_handle, $code_str );
+			fclose( $cache_file_handle );
 		}
 		
 		// 結合・圧縮した内容を出力する
